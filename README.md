@@ -29,7 +29,7 @@ And get this as a result:
      Generate an input file for a tree with **x** nodes and a maximum of **y** levels.
      
      `$ python tree-gen.py -n x -l y -g`.
-     Generate an input file for a tree with **x** nodes and a maximum of **y** levels and then generate the coresponding output JSON file so that the tree is viewable in the browser.
+     Generate an input file for a tree with **x** nodes and a maximum of **y** levels and then generate the corresponding output JSON file so that the tree is viewable in the browser.
      
      `$ python tree-gen.py -g`.
      Take the input file and generate the corresponding output JSON file so that it is viewable in the browser. Use this option when you have written your own tree.
@@ -74,26 +74,6 @@ Running `$ python tree-gen.py -g` when this content resides in the input file wo
 
 <img alt="A tree with multiple nodes" src="screenshots/screenshot2.png">
 
-# A python/broswer based tree generator
-
-This is a naive converter program that takes a markdown like text file containing a tree definition and converts it to JSON so that it can be (manipulated by javascript or other templates) for viewing in the browser.
-
-Represent nodes like this:
-
-```
-root
--parent
---child 1
---child 2
---child 3
--parent
---child 1
---child 2
-
-```
-And get this as a result:
-
-<img alt="A tree with a root node and one child" src="screenshots/screenshot0.png">
 
 ## To Do
 
