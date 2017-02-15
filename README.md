@@ -1,6 +1,6 @@
 # markdown-tree-viewer
 
-This is a naive converter program that takes a markdown like text file containing a tree definition and converts it to JSON so that it can be (manipulated by javascript or other templates) for viewing in the browser.
+This is a prototype for a converter program that takes a markdown like text file containing a tree definition and converts it to JSON so that it can be (manipulated by javascript or other templates) for viewing in the browser.
 
 Represent nodes like this:
 
