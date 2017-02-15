@@ -37,10 +37,13 @@ And get this as a result:
 
 ## Requirements & Examples
 
-* In this program, by definition, a tree must have a root node. A root node has a level of 0 in a tree. The root node must come first in the input file.
+* In this program, by definition, a tree must have a root node. 
+* A root node has a level of 0 in a tree. 
+* The root node must come first in the input file.
+* There can only be one root node.
 * Every node must go on a new line.
-* Levels are defined with the `-` (dash) symbol. A node with no dash indicates the root node, which there can only be one of.
-* A child of the root node has a level of 1.
+* Levels are defined with the `-` (dash) symbol. A node with no dash indicates the root node.
+* A child of the root node has a level of 1. A child of the child has a level of 2 and so on.
 
 Here is an example input file.
 
