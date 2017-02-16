@@ -8,22 +8,28 @@
 #
 ##
 
+import sys
+import ast
+import json
+import getopt
+import random
+import os.path
+
 # Extract level and node value from current line
 # of input file
 # ----------------------------------------------
 # Levels are indicated by the - mark. The root
 # node has no - mark.
 def countLevelAndExtractNodeVal(line):
+	
 	level = 0
-	nodeVal = ""
 
 	for c in line:
 		if c == "-":
 			level = level + 1
 		else:
-			nodeVal = nodeVal + c
-	
-	return [level, nodeVal[:-1]]
+			return [level, line[level:-1]]
+
 
 # Checks if the given input file is valid graph
 # ---------------------------------------------
@@ -33,6 +39,7 @@ def countLevelAndExtractNodeVal(line):
 # level greater than 1 more than the
 # level found at the previous node. 
 def checkInputGraphValidity(INPUT_FILE):
+	
 	count = 1
 	rootNodeCount = 0
 	previousNodeLevel = 0
@@ -57,50 +64,53 @@ def checkInputGraphValidity(INPUT_FILE):
 
 	file.close()
 
+
 # Generates valid input data to display as tree
 # ---------------------------------------------
 # Data is written to an input file. Tree output
 # is only generated when -g command is passed
 # with commands for generating tree data.
-def dataGen(nodes, maxLevelDepth):
-	import random
+def dataGen(nodes, maxLevelDepth, INPUT_FILE):
 
 	nodeList = range(nodes)
 
-	file = open("input", "w")
+	file = open(INPUT_FILE, "w")
 	file.write(str(nodeList[0]) + "\n")
-	file.write("-" + str(nodeList[1]) + "\n")
 
-	currentLevel = 1
+	if nodes > 1:
+		file.write("-" + str(nodeList[1]) + "\n")
 
-	for i in nodeList[2:]:
-		level = random.randint(1, maxLevelDepth)
+		currentLevel = 1
 
-		while level > currentLevel + 1:
+		for i in nodeList[2:]:
 			level = random.randint(1, maxLevelDepth)
 
-		tempString = ""
+			while level > currentLevel + 1:
+				level = random.randint(1, maxLevelDepth)
 
-		for j in range(level):
-			tempString = tempString + "-"
+			tempString = ""
 
-		tempString = tempString + str(nodeList[i]) + "\n"
+			for j in range(level):
+				tempString = tempString + "-"
 
-		file.write(tempString)
+			tempString = tempString + str(nodeList[i]) + "\n"
 
-		currentLevel = level
-		tempString = ""
+			file.write(tempString)
+
+			currentLevel = level
+			tempString = ""
+
 
 # Generates output data to display as tree
 # ----------------------------------------
 # Input file is read and json data is 
 # generated to view tree through
 # web browser. 
-def outputGen():
-	import ast
-	import json
+def outputGen(INPUT_FILE):
 
-	INPUT_FILE = "input"
+	if not os.path.isfile(INPUT_FILE):
+		print "No input file exists. Exiting..."
+		sys.exit()
 
 	checkInputGraphValidity(INPUT_FILE)
 
@@ -143,10 +153,9 @@ def outputGen():
 	file.write(json.dumps(ast.literal_eval(treeString)))
 
 
-
 if __name__ == "__main__":
-	import getopt
-	import sys
+
+	INPUT_FILE = "input"
 
 	nodes = 0
 	maxLevelDepth = 0
@@ -154,16 +163,24 @@ if __name__ == "__main__":
 
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "n:l:gh", ["nodes=", "level=", "generate=","help"])
+	
 	except getopt.GetoptError, err:
-		# print help information and exit:
-		print(err) # will print something like "option -a not recognized"
+		print err
 		sys.exit(-1)
 
 	for o, a in opts:
 		if o in ("-n", "--nodes"):
+			if int(a) < 1:
+				print "You cannot have a tree with less than 1 node."
+				sys.exit()
+
 			nodes = int(a)
 			switch1 = True
 		elif o in ("-l", "--max-level-depth"):
+			if int(a) < 1:
+				print "You cannot have a level depth of less than 1."
+				sys.exit()
+
 			maxLevelDepth = int(a)
 			switch2 = True
 		elif o in ("-g", "--generate-tree-output"):
@@ -197,10 +214,10 @@ Generate Output Tree Data
 		print 'See usage with -h or --help'
 		sys.exit()
 
-	if switch1 and switch2 and switch3:
-		dataGen(nodes, maxLevelDepth)
-		outputGen()
+	if switch1 == False and switch2 == False and switch3:
+		outputGen(INPUT_FILE)
+	elif switch1 and switch2 and switch3:
+		dataGen(nodes, maxLevelDepth, INPUT_FILE)
+		outputGen(INPUT_FILE)
 	elif switch1 and switch2:
-		dataGen(nodes, maxLevelDepth)
-	elif switch1 == False and switch2 == False and switch3 == True:
-		outputGen()
+		dataGen(nodes, maxLevelDepth, INPUT_FILE)
